@@ -1,11 +1,9 @@
 package com.dawmlab.tema1
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -13,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
  * Created by anupamchugh on 09/02/16.
  */
 class MultiViewTypeAdapter(private val items: List<Model>) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    private var clickListener: OnItemClickListener? = null
 
 
     override fun getItemCount(): Int {
@@ -63,49 +62,82 @@ class MultiViewTypeAdapter(private val items: List<Model>) :RecyclerView.Adapter
         }
     }
 
-    inner class EuropeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    fun setOnClickListener(itemClickListener: OnItemClickListener?) {
+        clickListener = itemClickListener
+    }
+    inner class EuropeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val continentTextView: TextView = itemView.findViewById(R.id.continent)
         private val animalTextView: TextView = itemView.findViewById(R.id.name)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         fun bind(item: Model) {
             continentTextView.text = item.continent.name
             animalTextView.text = item.animalName
         }
+
+        override fun onClick(view: View) {
+            clickListener?.onClick(view, adapterPosition)
+        }
     }
-    inner class AfricaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AfricaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val continentTextView: TextView = itemView.findViewById(R.id.continent)
         private val animalTextView: TextView = itemView.findViewById(R.id.name)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
         fun bind(item: Model) {
             continentTextView.text = item.continent.name
             animalTextView.text = item.animalName
         }
+        override fun onClick(view: View) {
+            clickListener?.onClick(view, adapterPosition)
+        }
     }
-    inner class AsiaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AsiaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),View.OnClickListener {
         private val continentTextView: TextView = itemView.findViewById(R.id.continent)
         private val animalTextView: TextView = itemView.findViewById(R.id.name)
-
+        init {
+            itemView.setOnClickListener(this)
+        }
         fun bind(item: Model) {
             continentTextView.text = item.continent.name
             animalTextView.text = item.animalName
         }
+        override fun onClick(view: View) {
+            clickListener?.onClick(view, adapterPosition)
+        }
     }
-    inner class AmericiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AmericiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),View.OnClickListener {
         private val continentTextView: TextView = itemView.findViewById(R.id.continent)
         private val animalTextView: TextView = itemView.findViewById(R.id.name)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
         fun bind(item: Model) {
             continentTextView.text = item.continent.name
             animalTextView.text = item.animalName
         }
+        override fun onClick(view: View) {
+            clickListener?.onClick(view, adapterPosition)
+        }
     }
-    inner class AustraliaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AustraliaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),View.OnClickListener {
         private val continentTextView: TextView = itemView.findViewById(R.id.continent)
         private val animalTextView: TextView = itemView.findViewById(R.id.name)
-
+        init {
+            itemView.setOnClickListener(this)
+        }
         fun bind(item: Model) {
             continentTextView.text = item.continent.name
             animalTextView.text = item.animalName
+        }
+        override fun onClick(view: View) {
+            clickListener?.onClick(view, adapterPosition)
         }
     }
 }
