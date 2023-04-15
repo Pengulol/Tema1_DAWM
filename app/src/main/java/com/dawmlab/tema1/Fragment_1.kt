@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 class Fragment_1: Fragment(), OnItemClickListener {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var items: List<Model>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        items = getDataList()
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,8 +32,6 @@ class Fragment_1: Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val items = getDataList()
-
         val adapter = MultiViewTypeAdapter(items)
         adapter.setOnClickListener(this)
         recyclerView.adapter = adapter
@@ -38,19 +41,20 @@ class Fragment_1: Fragment(), OnItemClickListener {
     override fun onClick(view: View?, position: Int) {
         //ToDo: navigate to Fragment_2 and pass data
         val bundle = Bundle()
-        bundle.putString("animalName", getDataList()[position].animalName)
-        bundle.putString("continentName", getDataList()[position].continent.toString())
+        bundle.putString("animalName", items[position].animalName)
+        bundle.putString("continentName", items[position].continent.toString())
 
         findNavController().navigate(R.id.action_fragment_1_to_fragment_2,bundle)
         Log.e("HomeActivity", "button clicked")
     }
     private fun getDataList(): List<Model> {
         //ToDo: add more animals
-        val europeAnimals = listOf("Lion", "Tiger", "Elephant")
-        val africaAnimals = listOf("Kangaroo", "Koala", "Wallaby")
-        val americaAnimals = listOf("Panda", "Gorilla", "Monkey")
-        val asiaAnimals = listOf("Lemur", "Zebra", "Giraffe")
-        val australiaAnimals = listOf("Kangaroo", "Koala", "Wallaby")
+        val europeAnimals = listOf("Lion", "Tiger", "Elephant", "Wolf", "Brown bear", "Moose", "Lynx", "Red fox", "Wild boar", "Badger")
+        val africaAnimals = listOf("Kangaroo", "Koala", "Wallaby", "Giraffe", "Zebra", "Cheetah", "Hippopotamus", "Hyena", "Ostrich", "Meerkat")
+        val americaAnimals = listOf("Panda", "Gorilla", "Monkey", "Grizzly bear", "Jaguar", "Bald eagle", "Raccoon", "Armadillo", "Sloth", "Capybara")
+        val asiaAnimals = listOf("Snow leopard", "Yak", "Orangutan", "Komodo dragon", "Red panda", "Tiger", "Gibbon", "Pangolin", "Bactrian camel", "Snowy owl")
+        val australiaAnimals = listOf("Kangaroo", "Koala", "Wallaby", "Platypus", "Tasmanian devil", "Wombat", "Emu", "Kookaburra", "Cassowary", "Quokka")
+
 
         val dataList = mutableListOf<Model>()
         europeAnimals.forEach { animal ->
@@ -68,6 +72,7 @@ class Fragment_1: Fragment(), OnItemClickListener {
         australiaAnimals.forEach { animal ->
             dataList.add(Model(Model.Continents.Australia, animal))
         }
+        dataList.shuffle()
         return dataList
     }
 

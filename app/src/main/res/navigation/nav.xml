@@ -26,7 +26,6 @@
         <action
             android:id="@+id/action_fragment_2_to_fragment_1"
             app:destination="@id/fragment_1"
-            app:popUpTo="@id/fragment_1"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>
