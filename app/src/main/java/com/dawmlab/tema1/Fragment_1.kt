@@ -35,7 +35,16 @@ class Fragment_1: Fragment(), OnItemClickListener {
         recyclerView.layoutManager = layoutManager
     }
     override fun onClick(view: View?, position: Int) {
-
+        val item = getDataList()[position]
+        val fragment = Fragment_2()
+        val bundle = Bundle()
+        bundle.putString("animalName", item.animalName)
+        bundle.putString("continentName", item.continent.toString())
+        fragment.arguments = bundle
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.FrLayout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
         Log.e("HomeActivity", "button clicked")
     }
     private fun getDataList(): List<Model> {
