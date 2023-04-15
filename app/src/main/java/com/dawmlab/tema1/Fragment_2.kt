@@ -21,7 +21,7 @@ class Fragment_2: Fragment(){
         when (continentName) {
             "Europe" -> view.setBackgroundResource(R.color.Europa)
             "Africa" -> view.setBackgroundResource(R.color.Africa)
-            "America" -> view.setBackgroundResource(R.color.Americi)
+            "Americi" -> view.setBackgroundResource(R.color.Americi)
             "Asia" -> view.setBackgroundResource(R.color.Asia)
             "Australia" -> view.setBackgroundResource(R.color.Australia)
         }

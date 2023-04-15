@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -35,16 +36,12 @@ class Fragment_1: Fragment(), OnItemClickListener {
         recyclerView.layoutManager = layoutManager
     }
     override fun onClick(view: View?, position: Int) {
-        val item = getDataList()[position]
-        val fragment = Fragment_2()
+        //ToDo: navigate to Fragment_2 and pass data
         val bundle = Bundle()
-        bundle.putString("animalName", item.animalName)
-        bundle.putString("continentName", item.continent.toString())
-        fragment.arguments = bundle
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.FrLayout, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        bundle.putString("animalName", getDataList()[position].animalName)
+        bundle.putString("continentName", getDataList()[position].continent.toString())
+
+        findNavController().navigate(R.id.action_fragment_1_to_fragment_2,bundle)
         Log.e("HomeActivity", "button clicked")
     }
     private fun getDataList(): List<Model> {

@@ -3,11 +3,16 @@ package com.dawmlab.tema1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
 
         val exitButton = findViewById<View>(R.id.exitButton)
@@ -15,11 +20,14 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        val fragment1 = Fragment_1()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.FrLayout, fragment1)
-        transaction.commit()
+      val NavHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = NavHostFragment.navController
 
+    setupActionBarWithNavController(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()||super.onSupportNavigateUp()
     }
 
 
