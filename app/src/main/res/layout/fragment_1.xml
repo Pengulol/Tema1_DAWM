@@ -6,6 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".Fragment_1">
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:padding="20dp"
+
+        >
+
+
+        <EditText
+
+            android:id="@+id/animalTextField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="@string/animal"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:autofillHints="animal"
+            />
+        <EditText
+            android:id="@+id/continentTextField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="@string/continent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:autofillHints="continent"
+            />
+        <Button
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add"
+            android:background="@drawable/button_selector"
+            android:textColor="@color/selector_white_text"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+
+            />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -13,9 +63,10 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

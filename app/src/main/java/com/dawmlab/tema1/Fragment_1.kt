@@ -25,12 +25,19 @@ class Fragment_1: Fragment(), OnItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         val view = inflater.inflate(R.layout.fragment_1, container, false)
         recyclerView = view.findViewById(R.id.recyclerView)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //find add button and set on click listener
+        val addButton= requireActivity().findViewById<View>(R.id.add)
+        addButton.setOnClickListener {
+          addAnimal("eu", Model.Continents.Europe)
+            Log.e("HomeActivity", "add clicked")
+        }
 
         val adapter = MultiViewTypeAdapter(items)
         adapter.setOnClickListener(this)
@@ -38,15 +45,41 @@ class Fragment_1: Fragment(), OnItemClickListener {
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = layoutManager
     }
-    override fun onClick(view: View?, position: Int) {
-        //ToDo: navigate to Fragment_2 and pass data
-        val bundle = Bundle()
-        bundle.putString("animalName", items[position].animalName)
-        bundle.putString("continentName", items[position].continent.toString())
 
-        findNavController().navigate(R.id.action_fragment_1_to_fragment_2,bundle)
-        Log.e("HomeActivity", "button clicked")
+    fun addAnimal(animal: String, continent: Model.Continents) {
+        items = items.toMutableList().apply {
+            add(Model(continent, animal))
+        }
+        recyclerView.adapter?.notifyItemInserted(items.size - 1)
+        Log.e("HomeActivity", "animal added")
     }
+    fun deleteAnimal(position: Int) {
+        items = items.toMutableList().apply {
+            removeAt(position)
+        }
+        recyclerView.adapter?.notifyItemRemoved(position)
+        Log.e("HomeActivity", "animal deleted")
+    }
+    override fun onClick(view: View?, position: Int) {
+        if (view?.id == R.id.delete) {
+            deleteAnimal(position)
+            Log.e("HomeActivity", "button clicked at position $position")
+        }
+        else {
+            //ToDo: navigate to Fragment_2 and pass data
+            val bundle = Bundle()
+            bundle.putString("animalName", items[position].animalName)
+            bundle.putString("continentName", items[position].continent.toString())
+
+            findNavController().navigate(R.id.action_fragment_1_to_fragment_2, bundle)
+            Log.e("HomeActivity", "button clicked")
+        }
+        }
+
+
+
+
+
     private fun getDataList(): List<Model> {
         //ToDo: add more animals
         val europeAnimals = listOf("Lion", "Tiger", "Elephant", "Wolf", "Brown bear", "Moose", "Lynx", "Red fox", "Wild boar", "Badger")
