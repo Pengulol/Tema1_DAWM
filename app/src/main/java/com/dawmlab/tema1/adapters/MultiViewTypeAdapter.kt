@@ -1,4 +1,4 @@
-package com.dawmlab.tema1
+package com.dawmlab.tema1.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,9 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.dawmlab.tema1.OnItemClickListener
+import com.dawmlab.tema1.R
+import com.dawmlab.tema1.model.Model
 
 
-
+@Suppress("DEPRECATION")
 class MultiViewTypeAdapter(private val items: List<Model>) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var clickListener: OnItemClickListener? = null
 
@@ -25,7 +28,7 @@ class MultiViewTypeAdapter(private val items: List<Model>) :RecyclerView.Adapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            Model.Continents.Europe.toInt() -> {
+            Model.Continents.Europa.toInt() -> {
                 val view = inflater.inflate(R.layout.item_europa, parent, false)
                 EuropeViewHolder(view)
 

@@ -1,4 +1,4 @@
-package com.dawmlab.tema1
+package com.dawmlab.tema1.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.dawmlab.tema1.R
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
