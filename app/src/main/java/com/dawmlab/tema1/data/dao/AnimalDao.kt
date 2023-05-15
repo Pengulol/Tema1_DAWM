@@ -23,8 +23,8 @@ interface AnimalDao {
 
     //get animal by name
     @Transaction
-    @Query("SELECT * FROM animal WHERE name = :name")
-    suspend fun getAnimalByName(name: String): Animal
+    @Query("SELECT id FROM animal WHERE name = :name")
+    suspend fun getAnimalIdByName(name: String): Int
 
 
 

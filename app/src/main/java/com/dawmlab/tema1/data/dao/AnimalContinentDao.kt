@@ -1,5 +1,6 @@
 package com.dawmlab.tema1.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -15,7 +16,7 @@ interface AnimalContinentDao {
 
     @Transaction
     @Query("SELECT * FROM animal_continent")
-    suspend fun getAllAnimalContinentCrossRef(): List<AnimalContinentCrossRef>
+    fun getAllAnimalContinentCrossRef(): LiveData<List<AnimalContinentCrossRef>>
 
     //update in animalContinentCrossRef by id of animal the continentId
     @Transaction

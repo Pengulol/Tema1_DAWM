@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="10dp"
-    cardview:cardBackgroundColor="@color/Africa"
+    cardview:cardBackground="@drawable/gradiant_australia"
     cardview:cardCornerRadius="50dp">
 
     <LinearLayout

@@ -23,13 +23,13 @@ interface ContinentDao {
     //get continent by id
 
     @Transaction
-    @Query("SELECT * FROM continent WHERE id = :id")
-    suspend fun getContinentById(id: Int): Continent
+    @Query("SELECT name FROM continent WHERE id = :id")
+    suspend fun getContinentNameById(id: Int): String
 
     //get continent by name
     @Transaction
-    @Query("SELECT * FROM continent WHERE name = :name")
-    suspend fun getContinentByName(name: String): Continent
+    @Query("SELECT id FROM continent WHERE name = :name")
+    suspend fun getContinentIdByName(name: String): Int
 
     //get continent count
     @Transaction
