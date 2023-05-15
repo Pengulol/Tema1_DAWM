@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,14 +33,15 @@ import java.util.Locale
 class Fragment_1: Fragment(), OnItemClickListener {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var items: MutableList<Model>
+    private lateinit var items: MutableLiveData<List<Model>>
     private lateinit var animalDao: AnimalDao
     private lateinit var continentDao: ContinentDao
     private lateinit var animalContinentDao: AnimalContinentDao
     private lateinit var animalContinentDatabase: AnimalContinentDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        items = mutableListOf()
+        items = MutableLiveData<List<Model>>().apply { value = emptyList() }
+
         animalContinentDatabase=AnimalContinentDatabase.getInstance(requireContext())
         animalDao=animalContinentDatabase.animalDao()
         continentDao=animalContinentDatabase.continentDao()
@@ -46,33 +49,37 @@ class Fragment_1: Fragment(), OnItemClickListener {
         //fill the continent table with the continents if they are not already there
         lifecycleScope.launch{
 
-            if(continentDao.getContinentByName("Europa")==null){
+            if(continentDao.getContinentIdByName("Europa")==null){
                 continentDao.insertContinent(Continent("Europa"))
             }
-            if(continentDao.getContinentByName("Africa")==null){
+            if(continentDao.getContinentIdByName("Africa")==null){
                 continentDao.insertContinent(Continent("Africa"))
             }
-            if(continentDao.getContinentByName("Americi")==null){
+            if(continentDao.getContinentIdByName("Americi")==null){
                 continentDao.insertContinent(Continent("Americi"))
             }
-            if(continentDao.getContinentByName("Asia")==null){
+            if(continentDao.getContinentIdByName("Asia")==null){
                 continentDao.insertContinent(Continent("Asia"))
             }
-            if(continentDao.getContinentByName("Australia")==null){
+            if(continentDao.getContinentIdByName("Australia")==null){
                 continentDao.insertContinent(Continent("Australia"))
             }
         }
 
 
         //from the database get the list with the animals and continents and add them to the items list
-        lifecycleScope.launch{
-            val animalContinentList=animalContinentDao.getAllAnimalContinentCrossRef()
-            for (animalContinent in animalContinentList){
-                val animal=animalDao.getAnimalNameById(animalContinent.animalId)
-                val continent=continentDao.getContinentById(animalContinent.continentId)
-                items.add(Model(Model.Continents.valueOf(continent.name),animal))
-            }
+        lifecycleScope.launch {
+            val animalContinentList = animalContinentDao.getAllAnimalContinentCrossRef()
 
+            if (animalContinentList?.value != null) {
+                val list = mutableListOf<Model>()
+                for (animalContinent in animalContinentList.value!!) {
+                    val animal = animalDao.getAnimalNameById(animalContinent.animalId)
+                    val continent = continentDao.getContinentNameById(animalContinent.continentId)
+                    list.add(Model(Model.Continents.valueOf(continent), animal))
+                }
+                items.value = list
+            }
         }
 
 
@@ -100,7 +107,7 @@ class Fragment_1: Fragment(), OnItemClickListener {
 
         }
 
-        val adapter = MultiViewTypeAdapter(items)
+        val adapter = MultiViewTypeAdapter(items.value ?: listOf())
         adapter.setOnClickListener(this)
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(requireContext())
@@ -118,7 +125,7 @@ class Fragment_1: Fragment(), OnItemClickListener {
             //convert the continent to first letter uppercase rest lowercase
 
             Log.e("HomeActivity", continent)
-            if (continentDao.getContinentByName(continent) == null) {
+            if (continentDao.getContinentIdByName(continent) == null) {
 
                 Toast.makeText(
                     requireContext(),
@@ -131,16 +138,16 @@ class Fragment_1: Fragment(), OnItemClickListener {
 
             //if the animal is already in the database then update the continent in the animalContinent table
 
-            if (animalDao.getAnimalByName(animal) != null) {
-                val animalId = animalDao.getAnimalByName(animal).id
-                val continentId = continentDao.getContinentByName(continent).id
+            if (animalDao.getAnimalIdByName(animal) != null) {
+                val animalId = animalDao.getAnimalIdByName(animal)
+                val continentId = continentDao.getContinentIdByName(continent)
                 animalContinentDao.updateAnimalContinentCrossRef(animalId, continentId)
             }
             //if the animal is not in the database then add it to the animal table and add the animal and continent to the animalContinent table
             else {
                 animalDao.insertAnimal(com.dawmlab.tema1.data.models.Animal(animal))
-                val animalId = animalDao.getAnimalByName(animal).id
-                val continentId = continentDao.getContinentByName(continent).id
+                val animalId = animalDao.getAnimalIdByName(animal)
+                val continentId = continentDao.getContinentIdByName(continent)
                 animalContinentDao.insertAnimalContinentCrossRef(
                     AnimalContinentCrossRef(
                         animalId,
@@ -153,12 +160,13 @@ class Fragment_1: Fragment(), OnItemClickListener {
     }
     fun deleteAnimal(position: Int) {
        //get the animal and continent from the position
-        val animal=items[position].animalName
-        val continent=items[position].continent.toString()
+        val animal= items.value!!.get(position).animalName
+        val continent=items.value!!.get(position).continent
+
         lifecycleScope.launch{
             //delete the animal from the animal table
             //get the animal id from the animal table
-            val animalId=animalDao.getAnimalByName(animal).id
+            val animalId=animalDao.getAnimalIdByName(animal)
             animalDao.deleteAnimal(Animal(animal,animalId))
             //delete the animal and continent from the animalContinent table
             animalContinentDao.deleteAnimalContinentCrossRef(animalId)
@@ -173,8 +181,9 @@ class Fragment_1: Fragment(), OnItemClickListener {
         else {
             //ToDo: navigate to Fragment_2 and pass data
             val bundle = Bundle()
-            bundle.putString("animalName", items[position].animalName)
-            bundle.putString("continentName", items[position].continent.toString())
+            val item=items.value!!.get(position)
+            bundle.putString("animalName", item.animalName)
+            bundle.putString("continentName", item.continent.toString())
 
             findNavController().navigate(R.id.action_fragment_1_to_fragment_2, bundle)
             Log.e("HomeActivity", "button clicked")
