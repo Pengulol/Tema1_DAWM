@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/transparent" /> <!-- Set a transparent background -->
+    <stroke
+        android:width="2dp"
+        android:color="#FF0000"
+    android:dashWidth="8dp"
+    android:dashGap="4dp" />
+
+
+
+</shape>

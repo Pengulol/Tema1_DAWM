@@ -20,11 +20,11 @@ class Fragment_2: Fragment(){
         name.text = animalName
         continent.text = continentName
         when (continentName) {
-            "Europe" -> view.setBackgroundResource(R.color.Europa)
-            "Africa" -> view.setBackgroundResource(R.color.Africa)
-            "Americi" -> view.setBackgroundResource(R.color.Americi)
-            "Asia" -> view.setBackgroundResource(R.color.Asia)
-            "Australia" -> view.setBackgroundResource(R.color.Australia)
+            "Europa" -> view.setBackgroundResource(R.drawable.gradient_europa)
+            "Africa" -> view.setBackgroundResource(R.drawable.gradient_africa)
+            "Americi" -> view.setBackgroundResource(R.drawable.gradient_americi)
+            "Asia" -> view.setBackgroundResource(R.drawable.gradient_asia)
+            "Australia" -> view.setBackgroundResource(R.drawable.gradient_australia)
         }
         return view
     }
